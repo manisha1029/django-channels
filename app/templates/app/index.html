@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>count page</h1>
+    <div id="count"></div>
+    <script>
+        const socket = new WebSocket('ws://localhost:8000/ws/ac/');
+        socket.onopen=()=>{
+            console.log('connected to server');
+            socket.send('hello from client');
+        }
+        socket.onmessage=(event)=>{
+            console.log('message from server', event.data);
+            const data = JSON.parse(event.data);
+            if(data.type === 'message'){
+                document.getElementById('count').innerHTML = data.message;
+            }
+        }
+        socket.onclose=()=>{
+            console.log('disconnected from server');
+        }
+    </script>
+</body>
+</html>
